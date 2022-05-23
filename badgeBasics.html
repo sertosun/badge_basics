@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Badge Basics</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+      integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <style>
+      body {
+        width: 100%;
+        height: 100vh;
+      }
+
+      #displayImage {
+        width: 300px;
+        height: 300px;
+        border: 1px solid black;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+      }
+    </style>
+  </head>
+  <body>
+    <input
+      type="text"
+      id="yourName"
+      placeholder="enter your name"
+      oninput="changeName()"
+    />
+    <h1 class="name">Enter Your Name</h1>
+
+    <h2 class="role">Role</h2>
+
+    <select name="role" id="roles">
+      <option value="0" disabled selected hidden>Select your role</option>
+      <option value="1">Attender</option>
+      <option value="2">Student</option>
+      <option value="3">Teacher</option>
+      <option value="4">Fachidiot</option>
+    </select>
+
+    <select name="color" id="color">
+      <option value="red">Red</option>
+      <option value="blue">Blue</option>
+      <option value="green">Green</option>
+    </select>
+
+    <div style="width: 100%; border: 1px solid black; margin-top: 1rem"></div>
+
+    <!-- -------------------------------------------- -->
+
+    <input
+      type="file"
+      id="image-input"
+      accept="image/png , image/jpeg , image/jpg "
+    />
+    <div id="displayImage"></div>
+
+    <!-- -------------------------------------------- -->
+
+    <div id="capture" style="padding: 10px; background: #f5da55">
+      <h4 style="color: #000">Hello world!</h4>
+    </div>
+
+    <button onclick="download()">Download Badge</button>
+    <!--   <a href="baseImageLink" download="myBadge.png">dfgfhjk</a> -->
+
+    <script>
+      //   html2canvas(document.querySelector("#capture")).then((canvas) => {
+      //     document.body.appendChild(canvas);
+      //   });
+
+      function download() {
+
+        const screenShotTarget = document.querySelector(".name");
+
+        html2canvas(screenShotTarget).then((canvas) => {
+          const baseImageLink = canvas.toDataURL("image/png");
+          var aTag = document.createElement("a");
+          aTag.setAttribute("href", baseImageLink);
+          aTag.setAttribute("download", "Lebenslauf.png");
+          aTag.click();
+        });
+      }
+
+      //---------------------------------------------------------------
+      //---------------------------------------------------------------
+
+      function changeName() {
+        var user = document.getElementById("yourName");
+        var userDisplay = document.querySelector(".name");
+        userDisplay.innerHTML = user.value;
+      }
+
+      //---------------------------------------------------------------
+      //---------------------------------------------------------------
+
+      document.getElementById("roles").onchange = function () {
+        var x = document.getElementById("roles").value;
+        var role = document.querySelector(".role");
+
+        if (x == "1") {
+          role.innerHTML = "Attender";
+        } else if (x == "2") {
+          role.innerHTML = "Student";
+        } else if (x == "3") {
+          role.innerHTML = "Teacher";
+        }
+      };
+
+      document.getElementById("color").onchange = () => {
+        var x = document.getElementById("color").value;
+
+        if (x == "red") {
+          document.body.style.background =
+            "linear-gradient(137deg, rgba(182,28,205,1) 15%, rgba(187,0,0,1) 72%)";
+        } else if (x == "blue") {
+          document.body.style.background =
+            "linear-gradient(137deg, rgba(182,28,205,1) 15%, rgba(0,57,187,1) 72%)";
+        } else if (x == "green") {
+          document.body.style.background =
+            "linear-gradient(137deg, rgba(182,28,205,1) 15%, rgba(48,187,0,1) 72%)";
+        }
+      };
+
+      //---------------------------------------------------
+      //---------------------------------------------------
+
+      const imageInput = document.querySelector("#image-input"); // inputfeld
+
+      imageInput.addEventListener("change", function () {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+          const uploadedImage = reader.result;
+          document.querySelector(
+            "#displayImage"
+          ).style.backgroundImage = `url(${uploadedImage})`;
+          // console.log(uploadedImage);
+        });
+        reader.readAsDataURL(this.files[0]);
+      });
+    </script>
+  </body>
+</html>
